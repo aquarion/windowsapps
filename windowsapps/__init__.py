@@ -23,7 +23,7 @@ def open_app(app_name):
 	if app == None:
 		raise ValueError('Application not found!')
 	else:
-		startfile('shell:AppsFolder\%s'%app[1])
+		startfile('shell:AppsFolder\\%s' % app[1])
 
 if __name__=='__main__':
         find_app('stealth pc monitor')
