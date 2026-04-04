@@ -18,6 +18,14 @@ def find_app(app_name):
 	else:
 		return "Application not found!"
 
+def find_app_by_id(app_id):
+	apps = get_apps()
+	for each in sorted(apps,key=len):
+		if app_id.upper() in apps[each].upper():
+			return each,apps[each]
+	else:
+		return "Application not found!"
+
 def open_app(app_name):
 	app = find_app(app_name)
 	if app == None:
