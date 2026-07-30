@@ -10,7 +10,7 @@ Updated by @Aquarion - https://github.com/aquarion/windowsapps
 """
 
 from json import loads
-from subprocess import getoutput
+from subprocess import run
 from os import startfile
 from typing import Dict, Tuple, Optional
 import time
@@ -30,8 +30,15 @@ class WindowsAppsCache:
 
     def _fetch_apps(self) -> Dict[str, str]:
         """Fetch fresh app data from PowerShell."""
-        cmd = 'powershell -ExecutionPolicy Bypass "Get-StartApps|convertto-json"'
-        apps_data = loads(getoutput(cmd))
+        cmd = [
+            "powershell",
+            "-NoProfile",
+            "-ExecutionPolicy", "Bypass",
+            "-Command",
+            "[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; Get-StartApps | ConvertTo-Json",
+        ]
+        result = run(cmd, capture_output=True, encoding="utf-8", errors="replace")
+        apps_data = loads(result.stdout)
         return {app["Name"]: app["AppID"] for app in apps_data}
 
     def get_apps(self, force_refresh: bool = False) -> Dict[str, str]:
